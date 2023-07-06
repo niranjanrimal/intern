@@ -14,6 +14,10 @@
             <div>
                 <a href="{{ route('permissions.create') }}" class="btn btn-primary">create</a>
             </div>
+
+            <a href="{{ route('roles.index') }}" class="btn btn-primary">Roles</a>
+
+            <a href="{{ route('users.index') }}" class="btn btn-primary">Users</a>
         </div>
 
         @if (session('success'))
