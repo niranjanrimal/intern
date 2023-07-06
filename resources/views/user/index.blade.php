@@ -1,8 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- CRUD Users --}}
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Role List</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
+                </div>
+                <div class="modal-body">
+
+                    <form action="{{ route('user-has-role.store') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="user_id" value="">
+                        <ul>
+                            @foreach ($roles as $role)
+                                <li>
+                                    <input type="checkbox" class="roles" name="roles[]" value="{{ $role->id }}">
+                                    {{ $role->name }}
+                                </li>
+                            @endforeach
+
+                        </ul>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- CRUD Users --}}
     <div class="bg-dark py-3">
         <div class="container">
             <h1 class="text-white">RolesAndPermissions</h1>
@@ -45,14 +81,17 @@
                                     @csrf
                                     @method('DELETE')
                                 </form>
+
+                                <button data-id="{{ $user->id }}" type="button"
+                                    class="btn btn-outline-success btn-sm permission_button" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                    Roles
+                                </button>
+
                             </td>
 
                             <td>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
-                                    Create Role
-                                </button>
+
                             </td>
 
                         </tr>
@@ -60,10 +99,39 @@
 
                 </table>
 
-
             </div>
 
         </div>
 
     </div>
 @endsection
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).on('click', '.permission_button', function(e) {
+        var user_id = $(this).attr('data-id');
+        $('#exampleModal').find('input[name="user_id"]').val(user_id);
+        let route = "{{ route('get-user-roles', ':id') }}";
+        route = route.replace(':id', user_id);
+        $.ajax({
+            type: "get",
+            url: route,
+            data: {
+                '_token': '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                $('.roles').each(function(i, ele) {
+                    let checkBoxVal = parseInt($(ele).attr('value'));
+                    if ($.inArray(checkBoxVal, response) !== -1) {
+                        console.log(checkBoxVal);
+                        $(ele).attr('checked', 'checked');
+                    } else {
+                        console.log(checkBoxVal);
+                    }
+                });
+            }
+        });
+    });
+</script>

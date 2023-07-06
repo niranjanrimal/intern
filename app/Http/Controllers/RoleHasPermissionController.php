@@ -35,18 +35,18 @@ class RoleHasPermissionController extends Controller
 
     $roles= RoleHasPermission::where('role_id', $request->role_id)->delete();
 
-            foreach ($request->permissions as $permission) {
-                $rolehaspermission= RoleHasPermission::where('role_id', $request->role_id)->where('permission_id', $permission)->first();
-                if($rolehaspermission){
-                    $rolehaspermission->delete();
+            $rolehaspermission= RoleHasPermission::where('role_id', $request->role_id)->delete();
+            if(is_array($request->permissions)){
+
+                foreach ($request->permissions as $permission) {
+                    $roleHasPermission = new RoleHasPermission();
+                    $roleHasPermission->role_id = $request->role_id;
+                    $roleHasPermission->permission_id = $permission;
+                    $roleHasPermission->save();
+                
                 }
-                $roleHasPermission = new RoleHasPermission();
-                $roleHasPermission->role_id = $request->role_id;
-                $roleHasPermission->permission_id = $permission;
-                $roleHasPermission->save();
-            
-    }
-        return redirect()->route('roles.index')->with('success','Role has permission added successfully!');
+            }
+        return redirect()->route('roles.index')->with('success','Role has permission Updated!');
     }
 
     /**
@@ -86,6 +86,7 @@ class RoleHasPermissionController extends Controller
         $permissions = $role->permissions->pluck('id')->toArray();
         return response()->json($permissions);
     }
+
 
     
 }

@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\UserHasRoles;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserHasRolesController;
 use App\Http\Controllers\RoleHasPermissionController;
 
 /*
@@ -47,3 +49,7 @@ Route::resource('permissions',PermissionController::class);
 
 Route::post('role-has-permission',[RoleHasPermissionController::class,'store'])->name('role-has-permission.store');
 Route::get('get-role-permissions/{role}',[RoleHasPermissionController::class,'getRolePermissions'])->name('get-role-permissions');
+
+
+Route::post('user-has-role',[UserHasRolesController::class,'store'])->name('user-has-role.store');
+Route::get('get-user-roles/{user}',[UserHasRolesController::class,'getUserRoles'])->name('get-user-roles');
