@@ -61,8 +61,10 @@ Route::delete('users/{user}',[UserController::class,'destroy'])->name('users.des
 
 //Role
 
-Route::resource('roles',RoleController::class);
-Route::resource('permissions',PermissionController::class);
+Route::middleware('auth')->group(function(){
+    Route::resource('roles',RoleController::class);
+    Route::resource('permissions',PermissionController::class);
+});
 
 
 

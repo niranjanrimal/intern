@@ -9,11 +9,11 @@ class PostController extends Controller
 {
     public function __construct()
     {
-     
+        // $this->middleware(['permission:read_post'])->only('index');
         $this->middleware(['permission:create_post'])->only('create');
         $this->middleware(['permission:update_post'])->only('edit');
         $this->middleware(['permission:delete_post'])->only('destroy');
-
+        
     }
     /**
      * Display a listing of the resource.

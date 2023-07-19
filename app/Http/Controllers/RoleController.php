@@ -13,6 +13,14 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->middleware(['permission:read_post'])->only('index');
+        $this->middleware(['permission:create_role'])->only('create');
+        $this->middleware(['permission:update_role'])->only('edit');
+        $this->middleware(['permission:delete_role'])->only('destroy');
+    }
     public function index()
     {
         $roles=Role::all();

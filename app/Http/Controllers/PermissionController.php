@@ -10,10 +10,20 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->middleware(['permission:read_post'])->only('index');
+        $this->middleware(['permission:create_permission'])->only('create');
+        $this->middleware(['permission:update_permission'])->only('edit');
+        $this->middleware(['permission:delete_permission'])->only('destroy');
+    }
+
+
     public function index()
     {
-        $permissions=permission::all();
-        return view('permission.index',compact('permissions'));
+        $permissions = permission::all();
+        return view('permission.index', compact('permissions'));
     }
 
     /**
@@ -29,9 +39,9 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $validate=$request->validate([
-            'title'=>'required',
-            'name'=>'required'
+        $validate = $request->validate([
+            'title' => 'required',
+            'name' => 'required'
         ]);
 
         $permissions = new permission();
@@ -39,7 +49,7 @@ class PermissionController extends Controller
         $permissions->name = $request->name;
         $permissions->save();
 
-        return redirect()->route('permissions.index')->with('success','Permission created successfully');
+        return redirect()->route('permissions.index')->with('success', 'Permission created successfully');
     }
 
     /**
@@ -55,7 +65,7 @@ class PermissionController extends Controller
      */
     public function edit(permission $permission)
     {
-        return view('permission.edit',compact('permission'));
+        return view('permission.edit', compact('permission'));
     }
 
     /**
@@ -64,15 +74,15 @@ class PermissionController extends Controller
     public function update(Request $request, permission $permission)
     {
         $validate = $request->validate([
-            'title'=>'required',
-            'name'=>'required'
+            'title' => 'required',
+            'name' => 'required'
         ]);
 
         $permission->title = $request->title;
         $permission->name = $request->name;
         $permission->save();
 
-        return redirect()->route('permissions.index')->with('success','Permission updated successfully');
+        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully');
     }
 
     /**
@@ -81,6 +91,6 @@ class PermissionController extends Controller
     public function destroy(permission $permission)
     {
         $permission->delete();
-        return redirect()->route('permissions.index')->with('success','Permission deleted successfully');
+        return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully');
     }
 }

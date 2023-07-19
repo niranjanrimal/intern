@@ -46,7 +46,7 @@
                             <td>{{ $post->title }}</td>
                             <td>{{ $post->name }} </td>
                             <td>
-                                @if (auth()->user()->checkPermission('read_post'))
+                                @if (auth()->user()->checkPermission('update_post'))
                                     <a href="{{ route('posts.edit', $post) }}" class="btn btn-primary">Edit</a>
                                 @endif
                                 @if (auth()->user()->checkPermission('delete_post'))
